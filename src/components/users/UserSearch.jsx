@@ -13,8 +13,8 @@ function UserSearch() {
     if (text === '') {
       alert('Please enter something');
     } else {
-      searchUsers(text)
-            setText('');
+      searchUsers(text);
+      setText('');
     }
   };
 
@@ -26,8 +26,9 @@ function UserSearch() {
             <div className="relative">
               <input
                 type="text"
-                className="w-full pr-40 bg-gray-20 input input-lg text-black"
+                className="w-full pr-40 bg-gray-200 input input-lg text-black"
                 placeholder="Search"
+                value={text}
                 onChange={handleChange}
               />
               <button
@@ -42,7 +43,9 @@ function UserSearch() {
       </div>
       {users.length > 0 && (
         <div>
-          <button className="btn btn-ghost btn-lg" onClick={clearUsers}>Clear</button>
+          <button className="btn btn-ghost btn-lg" onClick={clearUsers}>
+            Clear
+          </button>
         </div>
       )}
     </div>
