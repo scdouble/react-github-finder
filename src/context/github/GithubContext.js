@@ -1,11 +1,9 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useReducer } from 'react';
 import githubReducer from './GithubReducer';
 
 const GithubContext = createContext();
 
 export const GithubProvider = ({ children }) => {
-  // const [users, setUsers] = useState([]);
-  // const [loading, setLoading] = useState(true);
 
   const initialState = {
     users: [],
