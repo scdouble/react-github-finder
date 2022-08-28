@@ -4,14 +4,16 @@ import { useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Spinner from '../components/layout/Spinner';
 import GithubContext from '../context/github/GithubContext';
+import RepoList from '../components/repos/RepoList';
 
 export default function User() {
-  const { getUser, user, loading } = useContext(GithubContext);
+  const { getUser, user, loading, getUserRepos, repos } = useContext(GithubContext);
 
   const params = useParams();
 
   useEffect(() => {
     getUser(params.login);
+    getUserRepos(params.login)
   }, []);
 
   const {
@@ -47,7 +49,7 @@ export default function User() {
           <div className="custom-card-image mb-6 md:mb-0">
             <div className="rounded-lg shadow-xl card image-full">
               <figure>
-                <img src={avatar_url} alt="" srcset="" />
+                <img src={avatar_url} alt="" />
               </figure>
               <div className="card-body justify-end">
                 <h2 className="card-title mb-0">{name}</h2>
@@ -97,7 +99,11 @@ export default function User() {
                 <div className="stat">
                   <div className="stat-title text-md">Twitter</div>
                   <div className="text-lg stat-value">
-                    <a href={`https://twiter.com/${twitter_username}`} target="_black" rel="noreferrer">
+                    <a
+                      href={`https://twiter.com/${twitter_username}`}
+                      target="_black"
+                      rel="noreferrer"
+                    >
                       {twitter_username}
                     </a>
                   </div>
@@ -112,51 +118,35 @@ export default function User() {
             <div className="stat-figure text-secondary">
               <FaUsers className="text-3xl md:text-5xl"></FaUsers>
             </div>
-            <div className="stat-title pr-5">
-              Followers
-            </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
-              {followers}
-            </div>
+            <div className="stat-title pr-5">Followers</div>
+            <div className="stat-value pr-5 text-3xl md:text-4xl">{followers}</div>
           </div>
 
           <div className="stat">
             <div className="stat-figure text-secondary">
               <FaUserFriends className="text-3xl md:text-5xl"></FaUserFriends>
             </div>
-            <div className="stat-title pr-5">
-              Following
-            </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
-              {following}
-            </div>
+            <div className="stat-title pr-5">Following</div>
+            <div className="stat-value pr-5 text-3xl md:text-4xl">{following}</div>
           </div>
 
           <div className="stat">
             <div className="stat-figure text-secondary">
               <FaCodepen className="text-3xl md:text-5xl"></FaCodepen>
             </div>
-            <div className="stat-title pr-5">
-              Public Repos
-            </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
-              {public_repos}
-            </div>
+            <div className="stat-title pr-5">Public Repos</div>
+            <div className="stat-value pr-5 text-3xl md:text-4xl">{public_repos}</div>
           </div>
 
           <div className="stat">
             <div className="stat-figure text-secondary">
               <FaStore className="text-3xl md:text-5xl"></FaStore>
             </div>
-            <div className="stat-title pr-5">
-              Public Gists
-            </div>
-            <div className="stat-value pr-5 text-3xl md:text-4xl">
-              {public_gists}
-            </div>
+            <div className="stat-title pr-5">Public Gists</div>
+            <div className="stat-value pr-5 text-3xl md:text-4xl">{public_gists}</div>
           </div>
-
         </div>
+        <RepoList repos={repos} />
       </div>
     </>
   );

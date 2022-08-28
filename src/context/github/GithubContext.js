@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, useReducer } from 'react';
+import { createRenderer } from 'react-dom/test-utils';
 import githubReducer from './GithubReducer';
 
 const GithubContext = createContext();
@@ -14,6 +15,7 @@ export const GithubProvider = ({ children }) => {
     users: [],
     user: {},
     loading: false,
+    repos: [],
   };
 
   const [state, dispatch] = useReducer(githubReducer, initialState);
@@ -59,6 +61,7 @@ export const GithubProvider = ({ children }) => {
 
   const getUser = async (login) => {
     setLoading();
+
     const response = await fetch(`${GITHUB_URL}/users/${login}`, {
       // headers: { Authorization : `token ${GITHUB_TOKEN}`}
     });
@@ -72,6 +75,25 @@ export const GithubProvider = ({ children }) => {
         payload: data,
       });
     }
+  };
+
+  const getUserRepos = async (login) => {
+    setLoading();
+
+    const params = new URLSearchParams({
+      sort: 'created',
+      per_page: 10,
+    });
+
+    const response = await fetch(`${GITHUB_URL}/users/${login}/repos?${params}`, {
+      // headers: { Authorization : `token ${GITHUB_TOKEN}`}
+    });
+    const data = await response.json();
+
+    dispatch({
+      type: 'GET_REPOS',
+      payload: data,
+    });
   };
 
   const clearUsers = () => {
@@ -89,10 +111,12 @@ export const GithubProvider = ({ children }) => {
         users: state.users,
         user: state.user,
         loading: state.loading,
+        repos: state.repos,
         fetchUsers,
         searchUsers,
         clearUsers,
-        getUser
+        getUser,
+        getUserRepos,
       }}
     >
       {children}
